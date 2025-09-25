@@ -76,7 +76,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-// ---------- Basic page routes (kept from original) ----------
+
 app.get("/", (req, res) => {
   res.redirect("/index");
 });
@@ -148,12 +148,12 @@ mongoose.connect(process.env.MONGO_URL, {
   useUnifiedTopology: true,
 });
 
-// keep original behavior of db message
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => console.log("✅ Connected to MongoDB"));
 
-// ---------- Schemas (preserve yours) ----------
+
 const userSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true, trim: true },
@@ -207,8 +207,8 @@ const episodeSchema = new mongoose.Schema({
   description: String,
   videoKey: String, // R2 key or S3 key (not signed URL)
   thumbnailKey: String, // R2 key for thumbnail
-  order: { type: Number, required: true }, // 0-based episode order
-  duration: Number, // optional seconds
+  order: { type: Number, required: true }, 
+  duration: Number, 
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -246,7 +246,7 @@ enrollmentSchema.index({ user: 1, course: 1 }, { unique: true });
 
 const Enrollment = mongoose.model("Enrollment", enrollmentSchema);
 
-// ---------- Helper functions ----------
+
 function requireAdmin(req, res, next) {
   if (req.session.user && req.session.user.role === "admin") {
     return next();
@@ -266,10 +266,10 @@ function requireSubscription(req, res, next) {
   return res.redirect(`/login?redirect=${req.originalUrl}`);
 }
 
-// Utility: safe async unlink
+
 const unlinkAsync = util.promisify(fs.unlink);
 
-// ---------- Cloudflare R2 (S3-compatible) setup ----------
+// ---------- Cloudflare R2 setup ----------
 let s3Client = null;
 let r2Public = null;
 if (
@@ -285,7 +285,7 @@ if (
       secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
     },
   });
-  // r2Public uses same credentials but we'll use the public bucket name when uploading thumbnails
+ 
   r2Public = new S3Client({
     region: "auto",
     endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -307,7 +307,7 @@ async function deleteVideoFromBucket(key) {
   try {
     await s3Client.send(
       new DeleteObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME, // private videos
+        Bucket: process.env.R2_BUCKET_NAME,
         Key: key,
       })
     );
@@ -323,7 +323,7 @@ async function deleteThumbnailFromBucket(key) {
   try {
     await r2Public.send(
       new DeleteObjectCommand({
-        Bucket: process.env.R2_PUBLIC_BUCKET_NAME, // public thumbnails
+        Bucket: process.env.R2_PUBLIC_BUCKET_NAME, 
         Key: key,
       })
     );
@@ -333,9 +333,7 @@ async function deleteThumbnailFromBucket(key) {
   }
 }
 
-// Helper to build a public URL for a public bucket object (thumbnails)
-// Preferred: set R2_PUBLIC_BASE_URL in env (e.g. https://pub-...r2.dev)
-// Fallback tries to construct from CLOUDFLARE_ACCOUNT_ID (may not match your provided pub URL)
+
 function getPublicUrl(key) {
   if (!key) return null;
   const base = process.env.R2_PUBLIC_BASE_URL;
@@ -343,7 +341,6 @@ function getPublicUrl(key) {
     return `${base.replace(/\/$/, "")}/${encodeURIComponent(key)}`;
   }
   if (process.env.CLOUDFLARE_ACCOUNT_ID) {
-    // Note: this might not be identical to your published URL; set R2_PUBLIC_BASE_URL to be exact.
     return `https://${
       process.env.CLOUDFLARE_ACCOUNT_ID
     }.r2.dev/${encodeURIComponent(key)}`;
@@ -354,12 +351,12 @@ async function uploadToR2WithRetry(key, filePath, contentType, maxRetries = 3) {
   let attempt = 0;
   while (attempt < maxRetries) {
     try {
-      await uploadToR2FromFile(key, filePath, contentType); // your existing function
+      await uploadToR2FromFile(key, filePath, contentType); 
       return; // success
     } catch (err) {
       attempt++;
       if (attempt >= maxRetries) throw err;
-      const backoff = Math.pow(2, attempt) * 500; // 500ms, 1s, 2s
+      const backoff = Math.pow(2, attempt) * 500; 
       console.warn(
         `Upload failed (attempt ${attempt}), retrying in ${backoff}ms...`
       );
@@ -413,7 +410,7 @@ async function getSignedVideoUrl(key, expiresInSeconds = 60*30) {
   return url;
 }
 
-// ---------- Multer (disk storage) for streaming large uploads ----------
+// ---------- Multer for streaming large uploads ----------
 const tmpDir = path.join(os.tmpdir(), "kingfidel_uploads");
 if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
 
@@ -432,30 +429,28 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fileSize: 1024 * 1024 * 1024 * 2 },
-}); // up to 2GB default; adjust as needed
+}); 
 
-// Multer memory storage for small uploads (thumbnails)
+// Multer for small uploads 
 const memoryStorage = multer.memoryStorage();
 const uploadMemory = multer({
   storage: memoryStorage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // limit thumbnails to 5MB
+  limits: { fileSize: 20 * 1024 * 1024 }, 
 });
 const slugify = (text) => {
   return text
     .toString()
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    .replace(/\s+/g, "-") 
+    .replace(/[^\w\-]+/g, "") 
+    .replace(/\-\-+/g, "-"); 
 };
-// ---------- ROUTES: Auth / Register / Login / OTP etc (preserve original logic) ----------
 
 app.post("/api/register", async (req, res) => {
   try {
     const { fullName, email, phone, password } = req.body;
 
-    // Check for existing user by email or phone
     const existingUser = await User.findOne({
       $or: [{ email: email.toLowerCase().trim() }, { phone: phone.trim() }],
     });
@@ -473,7 +468,7 @@ app.post("/api/register", async (req, res) => {
       isSubscribed = true;
     }
 
-    // detect IP and country
+
     let ip = req.headers["x-forwarded-for"];
     if (ip) {
       ip = ip.split(",")[0].trim();
@@ -520,7 +515,6 @@ app.post("/api/login", async (req, res) => {
   const isValid = await user.validatePassword(password);
   if (!isValid) return res.status(401).send({ message: "Invalid credentials" });
 
-  // OTP check for subscribed users (unchanged)
   if (
     user.isSubscribed &&
     user.role === "user" &&
@@ -548,23 +542,20 @@ app.post("/api/login", async (req, res) => {
   const sessionToken = crypto.randomBytes(16).toString("hex");
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
-  // 1️⃣ remove any expired / unwanted tokens before adding a new one
-  // (if you store expiry in each session, filter here)
+  // remove any expired / unwanted tokens before adding a new one
   user.activeSessions = user.activeSessions.filter((s) => !!s.token);
 
-  // 2️⃣ push the new session at the front
   user.activeSessions.unshift({
     token: sessionToken,
     createdAt: new Date(),
     ip,
   });
 
-  // 3️⃣ trim to only the most recent 2
+  //  trim to only the most recent 2
   user.activeSessions = user.activeSessions.slice(0, 2);
 
   await user.save();
 
-  // 4️⃣ store the token in the express-session
   req.session.user = {
     id: user._id,
     email: user.email,
@@ -588,7 +579,6 @@ app.post("/api/verify-otp", async (req, res) => {
     return res.status(400).send("Invalid or expired OTP");
   }
 
-  // OTP valid → clear it, create session
   user.pendingOtp = null;
   user.otpExpires = null;
 
@@ -673,7 +663,6 @@ app.post("/api/reset-password", async (req, res) => {
       return res.status(400).json({ error: "Invalid OTP" });
     }
 
-    // check expiry
     if (otpRecord.expiresAt < new Date()) {
       return res.status(400).json({ error: "OTP expired" });
     }
@@ -697,7 +686,6 @@ app.post("/api/reset-password", async (req, res) => {
   }
 });
 
-// ---------- Admin & Courses (original + new update/delete routes) ----------
 
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
@@ -707,7 +695,6 @@ app.get("/courses/:id", requireSubscription, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "courses.html"));
 });
 
-// create course (original)
 app.post("/admin/courses", requireAdmin, async (req, res) => {
   const { title, description, thumbnailKey } = req.body;
   const slug = slugify(title);
@@ -731,16 +718,13 @@ app.post("/admin/courses", requireAdmin, async (req, res) => {
   }
 });
 
-// LIST courses (public) — now returns public URLs for thumbnails
 app.get("/api/courses", async (req, res) => {
   try {
     const courses = await Course.find().sort({ createdAt: -1 }).lean();
 
-    // add publicUrl for thumbnails
     const transformed = courses.map((c) => {
       const courseCopy = { ...c };
       courseCopy.thumbnailPublicUrl = getPublicUrl(c.thumbnailKey);
-      // also include count and first episode preview if desired
       courseCopy.episodeCount = (c.episodes || []).length;
       return courseCopy;
     });
@@ -752,14 +736,11 @@ app.get("/api/courses", async (req, res) => {
   }
 });
 
-// NEW: update course (admin)
 app.put("/admin/courses/:id", requireAdmin, async (req, res) => {
   try {
     const { title, description, thumbnailKey } = req.body;
     const course = await Course.findById(req.params.id);
     if (!course) return res.status(404).send("Course not found");
-
-    // Delete old thumbnail if a new one is provided
     if (
       thumbnailKey &&
       course.thumbnailKey &&
@@ -782,13 +763,10 @@ app.put("/admin/courses/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// NEW: delete course (admin) - deletes objects both from private & public buckets as appropriate
 app.delete("/admin/courses/:id", requireAdmin, async (req, res) => {
   try {
     const course = await Course.findByIdAndDelete(req.params.id);
-    // optionally delete R2 objects for episodes and thumbnail
     if (course) {
-      // delete course thumbnail from public bucket (if present)
       if (
         course.thumbnailKey &&
         r2Public &&
@@ -805,7 +783,6 @@ app.delete("/admin/courses/:id", requireAdmin, async (req, res) => {
         }
       }
 
-      // delete each episode video from private & episode thumbnail from public
       for (const ep of course.episodes || []) {
         if (ep.videoKey && s3Client && process.env.R2_BUCKET_NAME) {
           try {
@@ -838,7 +815,6 @@ app.delete("/admin/courses/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// ---------- /me endpoint ----------
 app.get("/me", async (req, res) => {
   const sessionUser = req.session.user;
   if (!sessionUser) return res.status(401).json({ error: "Not logged in" });
@@ -847,12 +823,10 @@ app.get("/me", async (req, res) => {
     const user = await User.findById(sessionUser.id);
     if (!user) return res.status(401).json({ error: "Not logged in" });
 
-    // check token still valid (exists in activeSessions array)
     const stillActive = user.activeSessions.some(
       (s) => s.token === sessionUser.token
     );
     if (!stillActive) {
-      // clear session from memory if token is invalid
       req.session.destroy(() => {});
       return res
         .status(401)
@@ -883,7 +857,6 @@ app.get("/me", async (req, res) => {
   }
 });
 
-// ---------- ADMIN: legacy server-side upload to R2 (fallback) ----------
 app.post(
   "/admin/upload-video",
   requireAdmin,
@@ -910,12 +883,10 @@ app.post(
         return res.status(500).send("Upload to storage failed");
       }
 
-      // remove tmp file
       try {
         await unlinkAsync(filePath);
       } catch (e) {}
 
-      // return key (store in course.videoUrl) and a short preview signed URL
       const previewUrl = await getSignedVideoUrl(key, 300); // 5 minutes
       res.json({ key, previewUrl });
     } catch (err) {
@@ -925,7 +896,6 @@ app.post(
   }
 );
 
-// ---------- NEW: PRESIGN upload URL for browser -> R2 direct PUT (recommended) ----------
 app.post(
   "/admin/presign-upload",
   requireAdmin,
@@ -945,11 +915,9 @@ app.post(
         ContentType: contentType || "application/octet-stream",
       });
 
-      // presign for PUT — browser will PUT the file to this URL
       const signedPutUrl = await getSignedUrl(s3Client, cmd, {
         expiresIn: 30,
-      }); // 10 minutes
-      // Return both the key (store this in course.videoUrl) and the signed PUT URL
+      }); 
       res.json({ key, signedPutUrl });
     } catch (err) {
       console.error("Presign upload error:", err);
@@ -1026,7 +994,7 @@ app.post("/flw-webhook", express.json(), async (req, res) => {
       });
 
       await sendMail({
-        to: process.env.USER_EMAIL, // your admin address
+        to: process.env.USER_EMAIL, 
         subject: adminEmailData.subject,
         html: adminEmailData.html,
       });
@@ -1039,9 +1007,7 @@ app.post("/flw-webhook", express.json(), async (req, res) => {
   }
 });
 
-// ---------- NEW ADMIN ENDPOINTS FOR EPISODES ----------
 
-// Add a new episode to a course
 app.post("/admin/courses/:id/episodes", requireAdmin, async (req, res) => {
   try {
     const { title, description, videoKey, thumbnailKey, order, duration } =
@@ -1071,7 +1037,7 @@ app.post("/admin/courses/:id/episodes", requireAdmin, async (req, res) => {
   }
 });
 
-// Update an episode in a course
+
 app.put("/admin/courses/:courseId/episodes/:episodeId", async (req, res) => {
   try {
     const { courseId, episodeId } = req.params;
@@ -1098,13 +1064,11 @@ app.put("/admin/courses/:courseId/episodes/:episodeId", async (req, res) => {
     if (title) episode.title = title;
     episode.description = description || "";
 
-    // Delete old video if new video is provided
     if (videoKey && episode.videoKey && episode.videoKey !== videoKey) {
       await deleteVideoFromBucket(episode.videoKey);
       episode.videoKey = videoKey;
     }
 
-    // Delete old thumbnail if new thumbnail is provided
     if (
       thumbnailKey &&
       episode.thumbnailKey &&
@@ -1122,7 +1086,6 @@ app.put("/admin/courses/:courseId/episodes/:episodeId", async (req, res) => {
   }
 });
 
-// Delete an episode from a course
 app.delete(
   "/admin/courses/:id/episodes/:order",
   requireAdmin,
@@ -1134,7 +1097,6 @@ app.delete(
       const ep = course.episodes.find((e) => e.order === order);
       if (!ep) return res.status(404).send("Episode not found");
 
-      // Optionally delete R2 objects for this episode
       if (s3Client && process.env.R2_BUCKET_NAME && ep.videoKey) {
         try {
           const delVid = new DeleteObjectCommand({
@@ -1169,9 +1131,7 @@ app.delete(
   }
 );
 
-// ---------- USER ENDPOINTS FOR COURSES + EPISODES ----------
 
-// Get course info + episodes (mark locked based on enrollment), include public thumbnail URLs
 app.get("/api/courses/:id", async (req, res) => {
   try {
     const course = await Course.findById(req.params.id).lean();
@@ -1188,7 +1148,6 @@ app.get("/api/courses/:id", async (req, res) => {
       }
     }
 
-    // mark locked episodes
     const episodesWithLock = (course.episodes || [])
       .slice()
       .sort((a, b) => a.order - b.order)
@@ -1225,7 +1184,7 @@ app.get("/api/courses/:id", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-// Get episodes for a specific course
+
 app.get("/admin/courses/:id/episodes", requireAdmin, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
@@ -1254,7 +1213,7 @@ app.post("/admin/courses/:id/episodes", requireAdmin, async (req, res) => {
   }
 });
 
-// Stream (signed URL) for an episode – only if subscribed and unlocked
+
 app.get(
   "/api/courses/:id/episodes/:order",
   requireSubscription,
@@ -1265,11 +1224,9 @@ app.get(
 
       const order = parseInt(req.params.order, 10);
 
-      // find the course's first episode order (supports 0-based or 1-based indexes)
       const orders = (course.episodes || []).map((e) => e.order);
       const firstOrder = orders.length ? Math.min(...orders) : 0;
 
-      // ensure enrollment exists (you already do this — keep it)
       let enrollment = await Enrollment.findOne({
         user: req.session.user.id,
         course: course._id,
@@ -1284,7 +1241,6 @@ app.get(
         await enrollment.save();
       }
 
-      // allow if requested is the first episode OR previous episode is completed
       const prevCompleted =
         order === firstOrder ||
         enrollment.progress.some((p) => p.episodeOrder === order - 1);
@@ -1341,13 +1297,12 @@ app.get("/api/courses/:id/episodes", requireSubscription, async (req, res) => {
       await enrollment.save();
     }
 
-    // completed episode orders
+    // completed episodes
     const completedOrders = enrollment.progress.map((p) => p.episodeOrder);
     const highestCompleted = completedOrders.length
       ? Math.max(...completedOrders)
       : -1;
 
-    // build payload
     const episodesWithLock = course.episodes.map((ep) => ({
       order: ep.order,
       title: ep.title,
@@ -1359,7 +1314,6 @@ app.get("/api/courses/:id/episodes", requireSubscription, async (req, res) => {
       locked: ep.order > (highestCompleted === -1 ? 1 : highestCompleted + 1), // locked beyond next
     }));
 
-    // send both episodes and which ones are completed
     res.json({
       episodes: episodesWithLock,
       progress: completedOrders,
@@ -1385,7 +1339,6 @@ app.post(
         course: course._id,
       });
 
-      // auto-enroll if missing
       if (!enrollment) {
         enrollment = new Enrollment({
           user: req.session.user.id,
@@ -1394,7 +1347,6 @@ app.post(
         });
       }
 
-      // only push if not already completed
       if (!enrollment.progress.some((p) => p.episodeOrder === order)) {
         enrollment.progress.push({
           episodeOrder: order,
@@ -1402,7 +1354,6 @@ app.post(
         });
       }
 
-      // track last accessed for “resume” features
       enrollment.lastAccessedEpisodeOrder = order;
       await enrollment.save();
 
@@ -1414,9 +1365,6 @@ app.post(
   }
 );
 
-// ---------- Episode-specific upload endpoints (admin) ----------
-
-// Upload episode video (disk multer used to stream large files)
 app.post(
   "/admin/upload-episode-video",
   requireAdmin,
@@ -1453,7 +1401,6 @@ app.post(
   }
 );
 
-// Upload episode thumbnail (memory)
 app.post(
   "/admin/upload-episode-thumbnail",
   requireAdmin,
@@ -1477,7 +1424,6 @@ app.post(
         return res.status(500).send("Upload to public bucket failed");
       }
 
-      // return key and public URL
       res.json({ key, publicUrl: getPublicUrl(key) });
     } catch (err) {
       console.error("Upload episode thumbnail error:", err);
@@ -1485,7 +1431,6 @@ app.post(
     }
   }
 );
-// ---- Start multipart upload ----
 app.post(
   "/admin/multipart/start-video-upload",
   requireAdmin,
@@ -1513,7 +1458,6 @@ app.post(
   }
 );
 
-// ---------- UPLOAD ONE PART ----------
 app.post("/admin/multipart/upload-part", requireAdmin, async (req, res) => {
   const busboy = Busboy({ headers: req.headers });
   let key, uploadId, partNumber;
@@ -1552,13 +1496,12 @@ app.post("/admin/multipart/upload-part", requireAdmin, async (req, res) => {
   req.pipe(busboy);
 });
 
-// ---------- COMPLETE MULTIPART UPLOAD ----------
 app.post(
   "/admin/multipart/complete-video-upload",
   requireAdmin,
   async (req, res) => {
     try {
-      const { key, uploadId, parts } = req.body; // parts is array of {ETag,PartNumber}
+      const { key, uploadId, parts } = req.body;
 
       const out = await s3Client.send(
         new CompleteMultipartUploadCommand({
@@ -1581,7 +1524,7 @@ app.post(
     }
   }
 );
-// ---- (Optional) Abort multipart upload ----
+
 app.post("/admin/multipart/abort", requireAdmin, async (req, res) => {
   const { key, uploadId } = req.body;
   try {
@@ -1595,7 +1538,6 @@ app.post("/admin/multipart/abort", requireAdmin, async (req, res) => {
     return res.json({ ok: true });
   } catch (err) {
     if (err.name === "NoSuchUpload" || err.Code === "NoSuchUpload") {
-      // Already aborted or never existed, not a fatal error
       console.warn("Upload already gone");
       return res.json({ ok: true });
     } else {
@@ -1604,7 +1546,7 @@ app.post("/admin/multipart/abort", requireAdmin, async (req, res) => {
   }
 });
 
-// Admin route to presign upload to R2
+
 app.post("/admin/presign", requireAdmin, async (req, res) => {
   const { bucket, key, contentType } = req.body;
   try {
@@ -1616,7 +1558,6 @@ app.post("/admin/presign", requireAdmin, async (req, res) => {
   }
 });
 
-// Upload course thumbnail (memory)
 app.post(
   "/admin/upload-course-thumbnail",
   requireAdmin,
@@ -1647,7 +1588,7 @@ app.post(
     }
   }
 );
-// DELETE episode (requires admin)
+
 app.delete("/admin/episodes/:id", requireAdmin, async (req, res) => {
   try {
     const episodeId = req.params.id;
@@ -1656,11 +1597,9 @@ app.delete("/admin/episodes/:id", requireAdmin, async (req, res) => {
     const course = await Course.findOne({ "episodes._id": episodeId });
     if (!course) return res.status(404).json({ message: "Episode not found" });
 
-    // Find the episode to delete
     const episode = course.episodes.id(episodeId);
     if (!episode) return res.status(404).json({ message: "Episode not found" });
 
-    // Delete the video from R2 if exists
     if (episode.videoKey) {
       try {
         await s3Client.send(
@@ -1674,7 +1613,6 @@ app.delete("/admin/episodes/:id", requireAdmin, async (req, res) => {
       }
     }
 
-    // Remove episode using pull
     course.episodes.pull({ _id: episodeId });
 
     await course.save();
@@ -1686,7 +1624,7 @@ app.delete("/admin/episodes/:id", requireAdmin, async (req, res) => {
   }
 });
 
-// ---------- Start server ----------
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
