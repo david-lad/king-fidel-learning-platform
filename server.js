@@ -132,12 +132,10 @@ app.get("/manage_subscription.html", (req, res) => {
   return res.redirect("/manage_subscription");
 });
 
-// put this somewhere after you’ve created `app` but before `app.listen`:
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-// ---------- MongoDB ----------
 if (!process.env.MONGO_URL) {
   console.error("MONGO_URL not set in environment! Exiting.");
   process.exit(1);
@@ -215,10 +213,10 @@ const episodeSchema = new mongoose.Schema({
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
-  thumbnailKey: String, // R2 key for course thumbnail
+  thumbnailKey: String, 
   slug: String,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  episodes: [episodeSchema], // embedded episodes array
+  episodes: [episodeSchema], 
   createdAt: { type: Date, default: Date.now },
   updatedAt: Date,
 });
@@ -226,7 +224,7 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.model("Course", courseSchema);
 
 const episodeProgressSchema = new mongoose.Schema({
-  episodeOrder: Number, // matches episode.order
+  episodeOrder: Number,
   completedAt: Date,
 });
 
@@ -239,7 +237,7 @@ const enrollmentSchema = new mongoose.Schema({
   },
   enrolledAt: { type: Date, default: Date.now },
   progress: [episodeProgressSchema], // completed episodes
-  lastAccessedEpisodeOrder: { type: Number, default: -1 }, // last watched index
+  lastAccessedEpisodeOrder: { type: Number, default: -1 }, 
 });
 
 enrollmentSchema.index({ user: 1, course: 1 }, { unique: true });
@@ -269,7 +267,7 @@ function requireSubscription(req, res, next) {
 
 const unlinkAsync = util.promisify(fs.unlink);
 
-// ---------- Cloudflare R2 setup ----------
+
 let s3Client = null;
 let r2Public = null;
 if (
@@ -542,7 +540,6 @@ app.post("/api/login", async (req, res) => {
   const sessionToken = crypto.randomBytes(16).toString("hex");
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
-  // remove any expired / unwanted tokens before adding a new one
   user.activeSessions = user.activeSessions.filter((s) => !!s.token);
 
   user.activeSessions.unshift({
@@ -608,7 +605,6 @@ app.post("/api/logout", async (req, res) => {
   if (req.session.user) {
     const user = await User.findById(req.session.user.id);
     if (user) {
-      // remove this session token from activeSessions
       user.activeSessions = user.activeSessions.filter(
         (s) => s.token !== req.session.user.token
       );
@@ -657,7 +653,6 @@ app.post("/api/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
 
   try {
-    // find OTP record
     const otpRecord = await Otp.findOne({ email, otp });
     if (!otpRecord) {
       return res.status(400).json({ error: "Invalid OTP" });
@@ -667,7 +662,6 @@ app.post("/api/reset-password", async (req, res) => {
       return res.status(400).json({ error: "OTP expired" });
     }
 
-    // update password for user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -676,7 +670,6 @@ app.post("/api/reset-password", async (req, res) => {
     await user.setPassword(newPassword);
     await user.save();
 
-    // delete OTP after use
     await Otp.deleteOne({ _id: otpRecord._id });
 
     res.json({ message: "Password reset successfully" });
@@ -928,7 +921,6 @@ app.post(
 
 app.post("/flw-webhook", express.json(), async (req, res) => {
   try {
-    // 1️⃣ Verify signature
     const signature = req.headers["verif-hash"];
     if (!signature || signature !== process.env.FLW_SECRET_HASH) {
       return res.status(401).send("Invalid signature");
@@ -942,7 +934,6 @@ app.post("/flw-webhook", express.json(), async (req, res) => {
       return res.status(400).send("Missing email");
     }
 
-    // 2️⃣ Find user
     const user = await User.findOne({
       email: customerEmail.toLowerCase().trim(),
     });
@@ -1627,4 +1618,5 @@ app.delete("/admin/episodes/:id", requireAdmin, async (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
 
