@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/accounts.css" />
+    <title>Forgot Password</title>
+  </head>
+  <body>
+    <div class="container">
+      <form id="forgotForm">
+        <button type="submit" id="otp-button">Send Verification Code</button>
+      </form>
+    </div>
+    <script src="/scripts/utils.js"></script>
+    <script>
+      const email = sessionStorage.getItem("temp-email");
+      document
+        .getElementById("forgotForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (email === null) {
+            showNotification("Invalid email address", "error");
+            document.getElementById("otp-button").disabled = true;
+            return setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+          }
+          sessionStorage.removeItem("temp-email");
+          showNotification(
+            "Sending verification code via email...",
+            "info",
+            5000
+          );
+          const res = await fetch("/api/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          window.location.href = "/reset";
+        });
+    </script>
+  </body>
+</html>

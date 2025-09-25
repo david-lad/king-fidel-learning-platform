@@ -1,0 +1,72 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f6f8fb;
+  height: 100%;
+}
+a,button{
+  -webkit-tap-highlight-color: transparent;
+}
+/* Header stays at top automatically */
+
+/* Center the manage container horizontally with auto margin */
+.manage-container {
+  background: white;
+  width: 98%;
+  max-width: 500px;
+  padding-top: 2rem;
+  padding-bottom:2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  margin: 2rem auto; /* center horizontally + add vertical spacing */
+}
+.manage-container h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #ac8303;
+}
+
+.manage-container p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.cancel-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #c62828;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #b71c1c;
+}
+/* Footer at bottom */
+footer {
+  margin-top: auto; /* pushes footer to bottom of the page */
+  width: 100%;
+}
+
+/* optional: stick footer always at bottom even with small content */
+#sub-footer {
+  background: #222222;
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+}
+

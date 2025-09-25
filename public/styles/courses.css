@@ -1,0 +1,748 @@
+/* courses.css - comprehensive (header, page, player, footer, mobile menu, etc.) */
+
+/* ========== variables & reset ========== */
+:root {
+  --accent: #cfa525;
+  --bg: #f6f7f9;
+  --card: #fff;
+  --muted: #707070;
+  --success: #2ecc71;
+  --header-padding-desktop: 2rem;
+  --header-padding-mobile: 1rem;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
+  background: linear-gradient(180deg, #f4f5f7 0%, #fbfcfd 100%);
+  color: #111;
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* page wrapper so footer sticks to bottom */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* main page area grows to push footer down */
+.page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 28px auto;
+  padding: 16px;
+  flex: 1;
+}
+
+/* ========== Header ========== */
+header {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100000;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* container spacing + alignment */
+header .container,
+.header-row.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem var(--header-padding-desktop);
+  position: relative;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* menu toggle (hamburger) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: #333;
+  padding: 4.5px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* logo (desktop in-flow) */
+.logo {
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+}
+
+/* header icons (right side) */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  min-width: 88px; /* prevents icon cluster from hugging the edge */
+  justify-content: flex-end;
+}
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.icon-btn:hover,
+.icon-btn:focus {
+  color: var(--accent);
+  outline: none;
+}
+
+/* desktop nav (keeps icons on the right aligned) */
+.desktop-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 5px;
+  align-items: center;
+}
+.desktop-nav ul li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.15rem;
+  padding: 6px;
+  border-radius: 6px;
+}
+.desktop-nav ul li a:hover,
+.desktop-nav ul li a:focus {
+  color: var(--accent);
+}
+
+/* consistent icon sizing */
+.icon-btn i,
+.desktop-nav ul li a i,
+.side-menu a i,
+footer .socials a i {
+  font-size: 1.25rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* ========== HERO / Course header ========== */
+.course-hero {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.hero-thumb {
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(20, 20, 20, 0.06);
+}
+.hero-thumb img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+}
+.thumb-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  z-index: 1;
+  transition: width 0.4s ease;
+}
+.hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hero-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.course-title {
+  font-size: 1.6rem;
+  margin: 0;
+  font-weight: 600;
+}
+.meta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.class-count {
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  border: 1px solid #eee;
+}
+.course-desc {
+  color: #333;
+  font-size: 1rem;
+}
+.enroll-btn-top {
+  margin-left: auto;
+  padding: 8px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ========== GRID & CARDS ========== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+}
+@media (max-width: 980px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Player card */
+.player-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(12, 12, 12, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.player-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.current-ep-title {
+  font-weight: 600;
+  color: #111;
+}
+
+/* ========== Video / Overlays / Controls ========== */
+.video-container {
+  position: relative;
+  background: #000;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: black;
+}
+
+/* overlays */
+.center-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 70px);
+  z-index: 6;
+  cursor: pointer;
+}
+.center-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+  z-index: 7;
+}
+.center-btn.show {
+  opacity: 1;
+}
+
+.seek-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 70px;
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 7;
+  cursor: pointer;
+}
+.seek-overlay.left {
+  left: 0;
+}
+.seek-overlay.right {
+  right: 0;
+}
+.seek-icon {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.8);
+  position: absolute;
+  pointer-events: none;
+  font-weight: 700;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/* bottom controls */
+.bottom-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.25s;
+  z-index: 8;
+}
+.bottom-controls.show {
+  opacity: 1;
+}
+.progress-bar-wrapper {
+  width: 100%;
+}
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  position: relative;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+.progress-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  left: 0%;
+}
+
+/* control row */
+.control-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.left-controls,
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#timeDisplay {
+  color: white;
+  font-size: 0.75rem;
+}
+.mini-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ========== Playlist / episodes ========== */
+.autoplay-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.playlist-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(12, 12, 12, 0.06);
+}
+.episodes-list {
+  display: grid;
+  gap: 8px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.episode-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+  background: linear-gradient(180deg, #fff, #fbfbfb);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.episode-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+.episode-item.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.episode-thumb {
+  width: 120px;
+  height: 67px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #ddd;
+}
+.episode-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* badges */
+.badge {
+  margin-left: auto;
+  background: #eee;
+  color: #333;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+.badge.completed {
+  background: var(--success);
+  color: #fff;
+}
+.badge.locked {
+  background: #f44336;
+  color: #fff;
+}
+.badge.unlocked {
+  background: #2196f3;
+  color: #fff;
+}
+
+/* controls group styles */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.controls button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ========== Course grid ========== */
+#courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.course-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+.course-card .image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+.course-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.course-card h2 {
+  font-size: 1rem;
+  padding: 0.5rem 1rem 0;
+}
+.course-card p {
+  font-size: 0.875rem;
+  padding: 0.25rem 1rem 0.5rem;
+  flex: 1;
+}
+
+/* ========== Footer ========== */
+footer {
+  background: #222;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+footer .socials a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+footer .socials a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* icon inside footer */
+footer .socials a i {
+  font-size: 1.6rem;
+}
+
+/* ========== Mobile menu / overlay ========== */
+.menu-toggle,
+.side-menu,
+.menu-overlay {
+  display: none;
+}
+
+/* side menu (off-canvas) */
+.side-menu {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: -78%;
+  width: 78%;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.18);
+  transition: left 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 2000;
+  padding-top: 64px;
+  -webkit-overflow-scrolling: touch;
+}
+.side-menu.open {
+  left: 0;
+}
+.side-menu .side-logo {
+  font-size: 1.25rem;
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.side-menu li {
+  border-bottom: 1px solid #eee;
+}
+.side-menu a {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 14px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+.side-menu a:hover {
+  background: #fafafa;
+}
+
+/* overlay */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1500;
+}
+.menu-overlay.show {
+  display: block;
+}
+
+/* ========== Responsive tweaks ========== */
+@media (max-width: 1024px) {
+  header .container {
+    padding: 0.8rem 1.5rem;
+  }
+}
+@media (max-width: 768px) {
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none;
+    }
+
+    .header-row.container {
+      justify-content: space-between;
+      padding-left: 0; /* flush with edges like homepage */
+      padding-right: 0;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .menu-toggle {
+      display: inline-flex;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #333;
+      padding: 4px; /* less padding */
+      margin-left: 0; /* no margin */
+    }
+
+    .logo {
+      order: 1;
+      margin: 0 auto;
+      font-size: 1.9rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .header-icons {
+      order: 2;
+      margin-left: auto;
+    }
+  }
+
+  .header-icons .icon-btn,
+  .header-icons a {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    padding: 4px;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* mobile side-menu width */
+  .side-menu {
+    width: 78%;
+    left: -78%;
+  }
+  .side-menu.open {
+    left: 0;
+  }
+}
+@media (max-width: 420px) {
+  .side-menu {
+    width: 82%;
+    left: -82%;
+  }
+  .logo {
+    font-size: 1.6rem;
+  }
+  .icon-btn {
+    font-size: 1.1rem;
+    padding: 5px;
+  }
+}
+
+/* ========== small animation for seek icon ========== */
+@keyframes slideFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+  }
+}
+
+/* accessibility: focus outlines for keyboard users */
+:focus {
+  outline: 3px solid rgba(199, 165, 37, 0.15);
+  outline-offset: 2px;
+}

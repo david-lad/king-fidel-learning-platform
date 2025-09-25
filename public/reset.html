@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/accounts.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form id="resetForm">
+        <input name="email" type="email" placeholder="Your email" />
+        <input name="otp" placeholder="OTP code" />
+        <input name="newPassword" type="password" placeholder="New password" />
+        <button type="submit">Reset Password</button>
+      </form>
+    </div>
+    <script src="/scripts/utils.js"></script>
+    <script>
+      document
+        .getElementById("resetForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const body = Object.fromEntries(formData);
+          const res = await fetch("/api/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          data = await res.json();
+          if (data.error){
+            showNotification(data.error,"error");
+          } else{
+            showNotification(data.message);
+          }
+          if (res.ok) location.href = "/login";
+        });
+    </script>
+  </body>
+</html>

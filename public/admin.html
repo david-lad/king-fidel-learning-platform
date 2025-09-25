@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles/admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="container">
+        <h1 class="logo">Admin Dashboard</h1>
+        <nav>
+          <ul>
+            <li>
+                <a href="/"><i class="fa fa-home"></i></a>
+              </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <!-- Create Course -->
+      <section class="card">
+        <h2>Create New Course</h2>
+        <form id="courseForm">
+          <label for="courseTitle">Course Title</label>
+          <input type="text" id="courseTitle" required />
+
+          <label for="courseDescription">Course Description</label>
+          <textarea id="courseDescription" rows="3" required></textarea>
+
+          <input type="file" id="courseThumbnail" accept="image/*" />
+          <img
+            id="courseThumbnailPreview"
+            style="display: none; max-width: 150px; margin-top: 5px"
+          />
+          <label for="courseThumbnail" class="file-label"
+            >Select Thumbnail</label
+          >
+
+          <button class="btn-primary" type="submit">
+            <span class="btn-text">Create Course</span>
+            <span class="spinner"></span>
+          </button>
+          <button type="button" id="cancelCourseEdit">Cancel Edit</button>
+        </form>
+      </section>
+
+      <!-- Add Episode -->
+      <section class="card">
+        <h2>Add New Class</h2>
+        <form id="episodeForm">
+          <label for="courseSelect">Select Course</label>
+          <select id="courseSelect"></select>
+
+          <label for="episodeTitle">Class Title</label>
+          <input type="text" id="episodeTitle" required />
+
+          <label for="episodeDescription">Class Description</label>
+          <textarea id="episodeDescription" rows="3" required></textarea>
+
+          <label for="episodeOrder">Class Position (1,2,3…)</label>
+          <input type="number" id="episodeOrder" required />
+
+          <input
+            type="file"
+            id="episodeVideo"
+            name="episodeVideo"
+            accept="video/*"
+          />
+          <div
+            id="episodeVideoPreview"
+            style="display: none; margin-top: 5px; font-style: italic"
+          ></div>
+          <label for="episodeVideo" class="file-label" id="episode-video-label"
+            >Select Video*</label
+          >
+
+          <input
+            type="file"
+            id="episodeThumb"
+            name="episodeThumb"
+            accept="image/*"
+          />
+          <img
+            id="episodeThumbPreview"
+            style="display: none; max-width: 150px; margin-top: 5px"
+          />
+          <label
+            for="episodeThumb"
+            class="file-label"
+            id="episode-thumbnail-label"
+            >Select Thumbnail*</label
+          >
+
+          <progress
+            id="videoProgress"
+            value="0"
+            max="100"
+            style="width: 100%; display: none"
+          ></progress>
+
+          <button class="btn-primary" type="submit">
+            <span class="btn-text">Add New Class</span>
+            <span class="spinner"></span>
+          </button>
+          <button type="button" id="cancelEpisodeEdit">Cancel Edit</button>
+        </form>
+      </section>
+
+      <!-- Existing Courses -->
+      <section class="card">
+        <h2>Existing Courses</h2>
+        <div id="coursesList" class="courses-grid"></div>
+      </section>
+
+      <!-- Episodes List -->
+      <section class="card">
+        <h2>Classes</h2>
+        <div id="episodesList" class="episodes-grid">
+          <p>Select a course to view classes</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/scripts/utils.js"></script>
+    <script src="/scripts/admin.js"></script>
+  </body>
+</html>

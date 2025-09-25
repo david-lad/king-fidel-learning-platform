@@ -1,0 +1,422 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: #f4f5f7;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Header */
+a,button{
+  -webkit-tap-highlight-color: transparent;
+}
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.logo {
+  color: #cfA525;
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap; /* prevent logo text wrapping */
+  margin: 0.5rem 0;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+nav ul li {
+  margin-left: 15px;
+  width: fit-content;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  -webkit-tap-highlight-color: transparent;
+}
+
+nav ul li a:hover {
+  color: #cfA525;
+}
+
+
+/* Main layout */
+.admin-main {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Card styling */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: #cfa525;
+  font-size: 1.5rem;
+}
+
+/* Forms */
+form label {
+  display: block;
+  margin: 0.5rem 0 0.25rem;
+  font-weight: 500;
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: #cfa525;
+  box-shadow: 0 0 0 2px rgba(207, 165, 37, 0.2);
+  outline: none;
+}
+
+/* File input styling */
+input[type="file"] {
+  display: none;
+}
+
+label.file-label {
+  display: inline-block;
+  background: #cfa525;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+  margin-bottom: 0.75rem;
+}
+
+label.file-label:hover {
+  background: #b6901f;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #cfa525;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  background-color: #b6901f;
+  transform: translateY(-1px);
+}
+
+.btn-primary.loading .btn-text {
+  opacity: 0.6;
+}
+
+.btn-primary.loading .spinner {
+  display: inline-block;
+}
+
+/* Spinner */
+.spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Courses grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.course-item {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.course-item img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.course-item h3 {
+  margin-left: 0.5rem;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.course-item p {
+  font-size: 0.9rem;
+  color: #666;
+  padding: 0 0.5rem;
+}
+
+.course-item button {
+  background: #cfa525;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin: 0.5rem;
+}
+
+.course-item button:hover {
+  background: #b6901f;
+}
+
+/* Episodes grid */
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.episode-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.episode-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+}
+
+.episode-item img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.episode-info {
+  padding: 0.75rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.episode-info h4 {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.episode-info p {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.delete-episode-btn, .edit-episode-btn, #cancelCourseEdit, #cancelEpisodeEdit {
+  margin-top: 0.5rem;
+  background-color: #cfa525;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-episode-btn:hover {
+  background-color: #b8921f;
+}
+
+/* Progress bar */
+progress {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+progress::-webkit-progress-bar { background-color: #eee; }
+progress::-webkit-progress-value { background-color: #3498db; }
+
+/* Responsive tweaks */
+@media (min-width: 768px) {
+  .admin-main {
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  }
+}
+@media (max-width: 768px) {
+  header .container {
+    flex-direction: column; /* stack logo and nav vertically */
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 2rem; /* shrink logo a bit so it fits */
+  }
+
+  nav ul {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  nav ul li {
+    flex: 1 1 auto;
+    margin: 0 5px;
+    text-align: center;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 0.5rem 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 500px){
+  .logo {
+    font-size: 1.5rem; /* further shrink on very small screens */
+  }
+}
+
+@media (max-width:370px){
+  .container{
+    max-width:100%;
+  }
+  .container ul li{
+    margin-left:10px;
+  }
+  nav ul li a {
+    font-size: small;
+  }
+}
+/* Highlight form when editing */
+form[data-editing-id] {
+  border: 2px solid #cfA525;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fffbe6; /* subtle yellow highlight */
+}
+
+/* Change button text when editing */
+form[data-editing-id] .btn-primary {
+  background-color: #f39c12;
+}
+
+form[data-editing-id] .btn-primary:hover {
+  background-color: #e08e0b;
+  transform: translateY(-1px);
+}
+
+/* Add small 'editing' label above the form */
+form[data-editing-id]::before {
+  content: "Editing Mode";
+  display: block;
+  font-weight: bold;
+  color: #cfA525;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+/* Flash animation for editing highlight */
+@keyframes flashHighlight {
+  0% { background-color: #fff8e1; }
+  50% { background-color: #fff1b8; }
+  100% { background-color: #fff8e1; }
+}
+
+
+/* Optionally highlight the currently editing episode in list */
+.episode-item.editing {
+  border: 2px dashed #cfA525;
+  padding: 0.25rem;
+  background-color: #fff8e1;
+  animation: flashHighlight 1s ease-in-out 1;
+}
+
+/* Similarly for courses */
+.course-item.editing {
+  border: 2px dashed #cfA525;
+  background-color: #fff8e1;
+  animation: flashHighlight 1s ease-in-out 1;
+}

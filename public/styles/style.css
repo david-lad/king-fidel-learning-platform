@@ -1,0 +1,433 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  background: rgba(255, 255, 255, 1);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #eee;
+  top: 0;
+  z-index: 100000;
+  position: sticky;
+}
+
+/* main header row */
+.header-row.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* hamburger left, logo center, icons right */
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+/* logo */
+.logo {
+  color: #ac8303;
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+/* desktop nav */
+.desktop-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.desktop-nav ul li {
+  margin-left: 15px;
+}
+.desktop-nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+.desktop-nav ul li a:hover {
+  color: #ac8303;
+}
+
+/* right-side icons */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto; /* push icons right on desktop */
+}
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-decoration: none;
+}
+.icon-btn:hover {
+  color: #ac8303;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  background: url("/Assets/hero.jpg") center/cover no-repeat;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #ac8303;
+  color: #000;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.btn:hover {
+  background: #ab6206;
+}
+
+/* ---------- ABOUT + COURSES ---------- */
+.about {
+  padding: 2rem 0;
+  text-align: center;
+}
+.about h2 {
+  color: #000;
+}
+.courses {
+  background: #f9f9f9;
+  padding: 1rem 0;
+}
+.courses h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #000;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.course-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+.course-card .image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+.course-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.course-card h2 {
+  color: #000;
+  margin: 1rem 0 0.5rem;
+}
+.course-card p {
+  padding: 0 1rem 1rem;
+  font-size: 1.1rem;
+  min-height: 60px;
+}
+
+.course-card .meta-row {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.course-card .class-count {
+  background: rgba(172, 131, 3, 0.8);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 6px rgba(171, 98, 6, 0.4);
+}
+
+@media (min-width: 768px) {
+  .enroll-btn {
+    padding: 10px 20px;
+    max-width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .course-grid {
+    max-width: 1000px;
+  }
+  .course-card h2 {
+    font-size: 2rem;
+  }
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: #222222;
+  color: #ffffff;
+  padding: 2rem 0 2rem 0;
+  text-align: center;
+}
+footer .container {
+  display: block;
+}
+footer .socials a {
+  margin: 0 8px;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+footer .socials a:hover {
+  color: #ac8303;
+}
+@media (min-width: 768px) {
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+  footer .socials {
+    text-align: right;
+  }
+  footer p {
+    margin: 0;
+  }
+}
+
+/* ---------- MOBILE MENU ---------- */
+.menu-toggle,
+.side-menu,
+.menu-overlay {
+  display: none;
+}
+
+/* side menu base */
+.side-menu {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: -78%; /* off-canvas */
+  width: 78%;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.18);
+  transition: left 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1000;
+  padding-top: 64px;
+  -webkit-overflow-scrolling: touch;
+}
+.side-menu.open {
+  left: 0;
+}
+.side-menu .side-logo {
+  font-size: 1.25rem;
+  text-align: center;
+  color: #ac8303;
+  margin-bottom: 0.6rem;
+}
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.side-menu li {
+  border-bottom: 1px solid #eee;
+}
+.side-menu a {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 14px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+/* make all header icons same size */
+.icon-btn i,
+.desktop-nav ul li a i,
+.side-menu a i {
+  font-size: 1.25rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* keep header-icons spaced and aligned */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* reorder icons on mobile automatically handled by DOM order */
+
+.side-menu a:hover {
+  background: #fafafa;
+}
+
+/* overlay */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+}
+.menu-overlay.show {
+  display: block;
+}
+
+/* MOBILE LAYOUT */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #333;
+    padding: 6px;
+    order: 0;
+  }
+
+  .header-row.container {
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+
+  .logo {
+    order: 1;
+    margin: 0 auto;
+    font-size: 1.9rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .header-icons {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .side-menu {
+    width: 78%;
+    left: -78%;
+  }
+  .side-menu.open {
+    left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .side-menu {
+    width: 82%;
+    left: -82%;
+  }
+  .logo {
+    font-size: 1.6rem;
+  }
+  .icon-btn {
+    font-size: 1.1rem;
+    padding: 5px;
+  }
+}
+
+/* --- tweak to align all header icons perfectly --- */
+.header-icons .icon-btn,
+.desktop-nav ul li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.header-icons .icon-btn i,
+.desktop-nav ul li a i {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  padding-top: 0;
+  padding-bottom: 0;
+}

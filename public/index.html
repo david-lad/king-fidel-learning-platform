@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>King Fidel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container header-row">
+        <button class="menu-toggle" aria-label="Menu">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        <h1 class="logo">King Fidel</h1>
+
+        <div class="header-icons" aria-hidden="false">
+          <button
+            class="icon-btn search-btn"
+            title="Search"
+            aria-label="Search"
+          >
+            <i class="fa fa-search"></i>
+          </button>
+
+          <a href="/login" id="profile-icon" class="icon-btn" title="Profile">
+            <i class="fa fa-user"></i>
+          </a>
+        </div>
+
+        <nav class="desktop-nav">
+          <ul>
+            <li id="cms-link-desktop" style="display: none">
+              <a href="/admin"><i class="fa fa-cog"></i></a>
+            </li>
+            <li id="cms-link-desktop" style="display: none">
+              <a href="/admin"><i class="fa fa-cog"></i></a>
+            </li>
+            <li>
+              <a href="/subscribe" class="header-subscribe-link"
+                ><i class="fa fa-graduation-cap"></i
+              ></a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- off-canvas mobile menu -->
+        <nav class="side-menu" aria-hidden="true">
+          <h2 class="side-logo">King Fidel</h2>
+          <ul>
+            <li id="cms-link" style="display: none">
+              <a href="/admin"><i class="fa fa-cog"></i> Admin Dashboard</a>
+            </li>
+            <!-- replaced courses with subscribe in side menu -->
+            <li>
+              <a
+                href="/subscribe"
+                class="header-subscribe-link"
+                id="side-header-subscribe-link"
+                ><i class="fa fa-graduation-cap"></i> Subscribe</a
+              >
+            </li>
+            <li>
+              <a href="/login" id="sign-in-link">
+                <i class="fa fa-sign-out-alt"></i> Sign In
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="menu-overlay" aria-hidden="true"></div>
+
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h2>Learn</h2>
+        <p>Exclusive online courses to boost your media skills</p>
+        <a href="#courses" class="btn">View Courses</a>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <h2>About Fidelis Alake</h2>
+        <p>
+          [Short intro, credibility, achievements and why people should learn
+          from you basically.]
+        </p>
+      </div>
+    </section>
+
+    <section id="courses" class="courses">
+      <div class="container">
+        <h1>Available Courses</h1>
+        <div class="course-grid" id="courseGrid"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="socials" id="contact">
+          <a href="https://www.instagram.com/kingfidel_alake/" target="_blank"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="https://www.linkedin.com/in/fidelisalake" target="_blank"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+          <a href="https://www.tiktok.com/@kingfidel_alake/" target="_blank"
+            ><i class="fab fa-tiktok"></i
+          ></a>
+          <a href="http://www.youtube.com/@kingfidel_alake" target="_blank"
+            ><i class="fab fa-youtube"></i
+          ></a>
+          <a href="https://www.x.com/fidel_alake" target="_blank"
+            ><i class="fab fa-x-twitter"></i
+          ></a>
+        </div>
+        <p>&copy; 2025 King Fidel. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="/scripts/script.js"></script>
+    <script src="/scripts/utils.js"></script>
+  </body>
+</html>

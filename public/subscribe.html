@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Subscribe - King Fidel</title>
+    <link rel="stylesheet" href="/styles/subscribe.css" />
+  </head>
+  <body>
+    <div class="subscribe-container">
+      <h1>Checkout</h1>
+      <!-- Currency toggle -->
+      <div class="currency-switch" id="currencySwitch" style="display: none;">
+        <button id="nairaBtn" class="active">₦ Naira</button>
+        <button id="usdBtn">$ Dollar</button>
+      </div>
+
+      <!-- Price display -->
+      <div class="price-box">
+        <span id="currencySymbol">₦</span>
+        <span id="priceValue">5,000</span>
+      </div>
+
+      <button id="subscribeBtn" class="subscribe-button">Subscribe Now</button>
+    </div>
+
+    <script src="/scripts/subscribe.js"></script>
+    <script src="/scripts/utils.js"></script>
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
+  </body>
+</html>

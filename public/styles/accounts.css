@@ -1,0 +1,119 @@
+/* General page layout */
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  width:100vw;
+}
+a,button{
+  -webkit-tap-highlight-color: transparent;
+}
+/* Form container (desktop default) */
+.container {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+/* Heading */
+.container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* Inputs */
+.container input{
+  width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.container input:focus {
+  border-color: #ac8303;
+  outline: none;
+}
+
+/* Button */
+.container button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #ac8303;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.container button:hover {
+  background-color: #ab6206;
+}
+
+/* Links under form */
+.container a {
+  color: #007BFF;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.container a:hover {
+  text-decoration: underline;
+}
+
+/* Paragraph under form (signup / login switch) */
+.container p {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* === FULLSCREEN FORM ON MOBILE === */
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    border-radius: 0;            /* remove rounded edges for fullscreen look */
+    padding: 2rem 1rem;
+    box-shadow: none;            /* flat design on mobile */
+  }
+
+  .container h2 {
+    font-size: 1.8rem;
+  }
+
+  .container input,
+  .container button {
+    font-size: 1.1rem;
+    padding: 1.2rem;
+  }
+
+  .container p {
+    font-size: 1rem;
+  }
+}

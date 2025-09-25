@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Subscription - King Fidel</title>
+    <link rel="stylesheet" href="/styles/manage_subscription.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">King Fidel</h1>
+        <nav>
+          <ul>
+            <li><a href="/index#hero">Home</a></li>
+            <li id="cms-link" style="display: none">
+              <a href="/admin">CMS</a>
+            </li>
+            <li><a href="/index#courses">Courses</a></li>
+            <li><a href="/index#contact">Contact</a></li>
+            <li><a href="/login" id="sign-in-link">Sign In</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="manage-container">
+      <h2>Your Subscription</h2>
+      <p id="planInfo">Loading your plan...</p>
+      <button id="cancelBtn" class="cancel-btn">Cancel Subscription</button>
+    </div>
+    <footer id="sub-footer">
+      <div class="container">
+        <p>&copy; 2025 King Fidel. All rights reserved.</p>
+        <div class="socials" id="contact">
+          <a href="https://www.instagram.com/kingfidel_alake/" target="_blank"
+            >Instagram</a
+          >
+          <a href="https://www.linkedin.com/in/fidelisalake" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="https://www.tiktok.com/@kingfidel_alake/" target="_blank"
+            >TikTok</a
+          >
+          <a href="http://www.youtube.com/@kingfidel_alake" target="_blank"
+            >YouTube</a
+          >
+          <a href="https://www.x.com/fidel_alake" target="_blank">X</a>
+        </div>
+      </div>
+    </footer>
+    <script src="/scripts/utils.js"></script>
+    <script>
+      (async () => {
+        const me = await fetch("/me").then((r) => r.json());
+        const planInfo = document.getElementById("planInfo");
+        const plans = {
+          PLN_NGN_MONTHLY_ID: "Monthly Subscription (₦)",
+          PLN_USD_MONTHLY_ID: "Monthly Subscription ($)",
+          PLN_NGN_YEARLY_ID: "Annual Subscription (₦)",
+          PLN_USD_YEARLY_ID: "Annual Subscription ($)",
+        };
+        if (me.role === "admin") {
+          document.getElementById("cms-link").style.display = "inline";
+        }
+        if (!me.isSubscribed) {
+          planInfo.textContent = "You are not subscribed.";
+          document.getElementById("cancelBtn").style.display = "none";
+        } else {
+          planInfo.textContent = `You are subscribed with plan: ${
+            plans[me.paymentPlan] || me.paymentPlan || "Unknown"
+          }`;
+        }
+        const signInLink = document.getElementById("sign-in-link");
+        signInLink.textContent = "Sign Out";
+        signInLink.href = "#";
+        signInLink.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const resLogout = await fetch("/api/logout", { method: "POST" });
+          if (resLogout.ok) {
+            window.location.href = "/";
+          } else {
+            const data = await resLogout.json();
+            showNotification(data.error || "Logout failed", "error");
+          }
+        });
+        document
+          .getElementById("cancelBtn")
+          .addEventListener("click", async () => {
+            if (confirm("Are you sure you want to cancel your subscription?")) {
+              const res = await fetch("/api/cancel-subscription", {
+                method: "POST",
+              });
+              if (res.ok) {
+                showNotification("Subscription cancelled.");
+                window.location.reload();
+              } else {
+                const err = await res.text();
+                showNotification("Error cancelling: " + err);
+              }
+            }
+          });
+      })();
+    </script>
+  </body>
+</html>

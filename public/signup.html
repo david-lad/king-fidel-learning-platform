@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/accounts.css" />
+    <title>Sign Up - King Fidel</title>
+  </head>
+  <body>
+    <div class="container">
+      <form id="signupForm">
+        <h2>Sign Up</h2>
+        <input name="fullName" placeholder="Full name" required />
+        <input name="email" type="email" placeholder="Email" required />
+        <input name="phone" type="tel" placeholder="Phone" required />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Register</button>
+        <p>Already have an account?<a href="/login"> Login</a></p>
+      </form>
+    </div>
+    <script src="/scripts/utils.js"></script>
+    <script>
+      // simple helper
+      function showError(message) {
+        showNotification(message,"error"); 
+      }
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const body = Object.fromEntries(new FormData(form));
+
+          const nameRegex = /^[A-Za-z]+(?:\s+[A-Za-z]+)+$/;
+          if (!nameRegex.test(body.fullName.trim())) {
+            return showError("Enter your full name (first and last name).");
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(body.email.trim())) {
+            return showError("Enter a valid email address.");
+          }
+
+          const phoneRegex = /^\+?[0-9]{7,15}$/;
+          if (!phoneRegex.test(body.phone.trim())) {
+            return showError("Enter a valid phone number.");
+          }
+
+          const passwordRegex =
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+          if (!passwordRegex.test(body.password)) {
+            return showError(
+              "Password must be at least 8 characters long and contain at least one letter and one number."
+            );
+          }
+
+          // If all regex checks pass, submit to API:
+          try {
+            const res = await fetch("/api/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            const data = await res.json();
+            if (res.ok) {
+              const me = await fetch("/me")
+                .then((r) => r.json())
+                .catch(() => null);
+              if (me && me.role === "admin") {
+                location.href = "/index";
+              } else {
+                location.href = "/login";
+              }
+            } else {
+              showError(
+                "Registration Error: " +
+                  (data.error || data.message || res.statusText)
+              );
+            }
+          } catch (err) {
+            showError("Network error. Please try again.");
+          }
+        });
+    </script>
+  </body>
+</html>
