@@ -67,7 +67,7 @@
           } else if (data.status === "otp_required") {
             showOtpField(data.email);
           } else {
-            showNotification("Login Error: " + (message || ""), "error");
+            showNotification("Login Error: " + (data.message || ""), "error");
           }
         });
 
